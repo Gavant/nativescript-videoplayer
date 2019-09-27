@@ -6,9 +6,9 @@
     }
   },
   "dependencies": {
+    "@gavant/nativescript-videoplayer": "file:../src",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-unit-test-runner": "^0.3.4",
-    "@gavant/nativescript-videoplayer": "file:../src",
     "tns-core-modules": "^4.0.0"
   },
   "devDependencies": {
