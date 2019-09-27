@@ -362,8 +362,8 @@ class PlayerObserverClass extends NSObject {
 
         owner.sendEvent(VideoCommon.errorEvent, {
           error: {
-            code: baseError.code,
-            domain: baseError.domain
+            code: baseError && baseError.code,
+            domain: baseError && baseError.domain
           },
           stack: error.stack
         });

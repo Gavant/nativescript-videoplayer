@@ -1,5 +1,5 @@
 {
-  "name": "nativescript-videoplayer",
+  "name": "@gavant/nativescript-videoplayer",
   "version": "4.2.1",
   "main": "videoplayer",
   "typings": "videoplayer.d.ts",
@@ -43,7 +43,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bradmartin/nativescript-videoplayer.git"
+    "url": "git+https://github.com/Gavant/nativescript-videoplayer.git"
   },
   "keywords": [
     "NativeScript",
@@ -113,9 +113,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bradmartin/nativescript-videoplayer/issues"
+    "url": "https://github.com/Gavant/nativescript-videoplayer/issues"
   },
-  "homepage": "https://github.com/bradmartin/nativescript-videoplayer",
+  "homepage": "https://github.com/Gavant/nativescript-videoplayer",
   "readmeFilename": "README.md",
   "gitHead": "7a5addbe9192a7708fbaac9db42e33f2a156fea6",
   "_id": "nativescript-videoplayer@0.1.0",
