@@ -75,12 +75,30 @@ export class Video extends VideoCommon {
       // const url = NSURL.URLWithString(this['_url']);
       const url = NSURL.URLWithString(this._url);
       CLog(CLogTypes.info, 'Video._setNativeVideo ---', `url: ${url}`);
-      const options: any = NSDictionary.dictionaryWithDictionary(<any>{
+      const options: any = NSDictionary.dictionaryWithDictionary({
         AVURLAssetHTTPHeaderFieldsKey: this._headers
-      });
+      } as any);
       const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(url, options);
       const item: AVPlayerItem = AVPlayerItem.playerItemWithAsset(asset);
       nativeVideoPlayer = item;
+    }
+
+    if (this.filter) {
+      nativeVideoPlayer.videoComposition = AVMutableVideoComposition.videoCompositionWithAssetApplyingCIFiltersWithHandler(
+        nativeVideoPlayer.asset,
+        request => {
+          let filter = CIFilter.filterWithName('CIColorControls');
+          filter.setValueForKey(request.sourceImage, kCIInputImageKey);
+          filter.setDefaults();
+          filter.setValueForKey(0.0, kCIInputSaturationKey);
+          let output = filter.valueForKey(kCIOutputImageKey);
+          if (!output) {
+            request.finishWithError(NSError.alloc().initWithDomainCodeUserInfo('Could not filter frame', 0, null));
+          } else {
+            request.finishWithImageContext(output, null);
+          }
+        }
+      );
     }
 
     if (nativeVideoPlayer != null) {
@@ -316,19 +334,21 @@ export class Video extends VideoCommon {
     let r = this._playerController.videoBounds;
 
     if (this.mode !== mode) {
-      let transform = CGAffineTransformIdentity;
+      if (!this.filter) {
+        let transform = CGAffineTransformIdentity;
 
-      if (mode === 'LANDSCAPE') {
-        transform = CGAffineTransformRotate(transform, (90 * 3.14159265358979) / 180);
-        this._playerController.view.transform = transform;
+        if (mode === 'LANDSCAPE') {
+          transform = CGAffineTransformRotate(transform, (90 * 3.14159265358979) / 180);
+          this._playerController.view.transform = transform;
 
-        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.width, this.nativeView.bounds.size.height);
-        this.nativeView.frame = newFrame;
-      } else if (this.mode !== mode && mode === 'PORTRAIT') {
-        transform = CGAffineTransformRotate(transform, (0 * 3.14159265358979) / 180);
-        this._playerController.view.transform = transform;
-        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.height, this.nativeView.bounds.size.width);
-        this.nativeView.frame = newFrame;
+          const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.width, this.nativeView.bounds.size.height);
+          this.nativeView.frame = newFrame;
+        } else if (this.mode !== mode && mode === 'PORTRAIT') {
+          transform = CGAffineTransformRotate(transform, (0 * 3.14159265358979) / 180);
+          this._playerController.view.transform = transform;
+          const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.height, this.nativeView.bounds.size.width);
+          this.nativeView.frame = newFrame;
+        }
       }
 
       this.mode = mode;

@@ -135,6 +135,8 @@ export class VideoCommon extends View {
 
   public mode = 'PORTRAIT';
 
+  public filter = false;
+
   /**
    * Notify events by name and optionally pass data
    */
@@ -197,7 +199,8 @@ loopProperty.register(VideoCommon);
 
 export const mutedProperty = new Property<VideoCommon, boolean>({
   name: 'muted',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
+  valueChanged: onMutedPropertyChanged
 });
 mutedProperty.register(VideoCommon);
 
@@ -206,6 +209,12 @@ export const fillProperty = new Property<VideoCommon, boolean>({
   valueConverter: booleanConverter
 });
 fillProperty.register(VideoCommon);
+
+export const filterProperty = new Property<VideoCommon, boolean>({
+  name: 'filter',
+  valueConverter: booleanConverter
+});
+filterProperty.register(VideoCommon);
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 // var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
@@ -255,4 +264,14 @@ function onHeadersPropertyChanged(view, oldValue, newValue) {
       onSrcPropertyChanged(view, null, src);
     }
   }
+}
+
+function onMutedPropertyChanged(view, oldValue, newValue) {
+  CLog(
+    CLogTypes.info,
+    'VideoCommon.onMutedPropertyChanged ---',
+    `view: ${view}, oldValue: ${oldValue}, newValue: ${newValue}`
+  );
+  const video = view;
+  video.mute(newValue);
 }
