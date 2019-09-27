@@ -75,9 +75,9 @@ export class Video extends VideoCommon {
       // const url = NSURL.URLWithString(this['_url']);
       const url = NSURL.URLWithString(this._url);
       CLog(CLogTypes.info, 'Video._setNativeVideo ---', `url: ${url}`);
-      const options: any = NSDictionary.dictionaryWithDictionary({
+      const options: any = NSDictionary.dictionaryWithDictionary(<any>{
         AVURLAssetHTTPHeaderFieldsKey: this._headers
-      } as any);
+      });
       const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(url, options);
       const item: AVPlayerItem = AVPlayerItem.playerItemWithAsset(asset);
       nativeVideoPlayer = item;
@@ -160,12 +160,14 @@ export class Video extends VideoCommon {
 
   public mute(mute: boolean) {
     CLog(CLogTypes.info, 'Video.mute ---', `mute: ${mute}`);
-    this.player.muted = mute;
-    // send the event
-    if (mute === true) {
-      this.sendEvent(VideoCommon.mutedEvent);
-    } else {
-      this.sendEvent(VideoCommon.unmutedEvent);
+    if (this.player) {
+      this.player.muted = mute;
+      // send the event
+      if (mute === true) {
+        this.sendEvent(VideoCommon.mutedEvent);
+      } else {
+        this.sendEvent(VideoCommon.unmutedEvent);
+      }
     }
   }
 
