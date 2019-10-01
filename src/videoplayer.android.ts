@@ -131,10 +131,12 @@ export class Video extends VideoCommon {
   }
 
   public pause(): void {
-    this.playState = STATE_PAUSED;
-    this.player.pause();
-    this.sendEvent(VideoCommon.pausedEvent);
-    this._removePlaybackTimeObserver();
+    if (this.player) {
+      this.playState = STATE_PAUSED;
+      this.player.pause();
+      this.sendEvent(VideoCommon.pausedEvent);
+      this._removePlaybackTimeObserver();
+    }
   }
 
   public mute(mute: boolean): void {
