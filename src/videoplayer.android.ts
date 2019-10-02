@@ -664,14 +664,13 @@ export class Video extends VideoCommon {
       if (fill) {
         scaleY = 1;
         scaleX = (viewHeight * this.videoWidth) / this.videoHeight / currentWidth;
-        // if (scaleY * currentHeight < viewHeight) {
-        //     scaleY = viewHeight / currentHeight;
-        //     scaleX = (scaleY * currentHeight * this.videoWidth / this.videoHeight) / currentWidth;
-        // }
-        // else if (scaleX * currentWidth < viewWidth) {
-        //     scaleX = viewWidth / currentWidth;
-        //     scaleY = (scaleX * currentWidth * this.videoHeight / this.videoWidth) / currentHeight;
-        // }
+        if (scaleY * currentHeight < viewHeight) {
+          scaleY = viewHeight / currentHeight;
+          scaleX = (scaleY * currentHeight * this.videoWidth) / this.videoHeight / currentWidth;
+        } else if (scaleX * currentWidth < viewWidth) {
+          scaleX = viewWidth / currentWidth;
+          scaleY = (scaleX * currentWidth * this.videoHeight) / this.videoWidth / currentHeight;
+        }
       } else {
         scaleX = viewWidth / currentWidth;
         scaleY = (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
